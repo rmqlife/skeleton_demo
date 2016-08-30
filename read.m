@@ -15,7 +15,7 @@ bset = [yb,xb];
 [ys,xs] = find(S>0);
 sset = [ys,xs];
 
-for times=1:20
+for times=1:10
     % select a point p on S
     i = randi(size(sset,1),1);
     p = sset(i,:);
@@ -27,14 +27,12 @@ for times=1:20
     % distances, find the nearest 2 points
     pdist = sqrt(sum((pstack-bset).^2,2));
     [sorted, index] = sort(pdist,'ascend');
-    nearest1 = bset(index(1),:);
-    nearest2 = bset(index(2),:);
 
     % plot
-    plot(p(2),p(1),'g*');
-    for i = 1:2
+    plot(p(2),p(1),'gx');
+    for i = 1:1
         bnear = bset(index(i),:);
-        plot(bnear(2),bnear(1),'ro');
-        viscircles([p(2),p(1)], sorted(i),'Color','r')
+        %plot(bnear(2),bnear(1),'ro');
+        viscircles([p(2),p(1)], sorted(i),'Color','r','LineWidth',0.5);
     end
 end

@@ -1,6 +1,6 @@
 clear; close all; clc;
 im = imread('leaf1.pgm');
-S = imread('~/out.png');
+S = imread('out.png');
 S = S(23:size(S,1),:,1);
 S = uint8(255*(S>0));
 % find the boundary of the original image

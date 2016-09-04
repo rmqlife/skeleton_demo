@@ -18,16 +18,23 @@ sset = [y,x];
 [y,x] = find(im==0);
 iset = [y,x]; 
 
+agent_radius = 10;
 % random selection from the inner space of the silhouette
 count = 20;
-i = randi(size(iset,1),count,1);
-pset = iset(i,:);
+pset = zeros(count,2);
+num = 1;
+while num<count
+    i = randi(size(iset,1),1,1);
+    p = iset(i,:);
+    if dist(p,bset) < agent_radius
+        continue
+    end
+    pset(num,:) = p;
+    num = num + 1;
+end
 
-
-for times=1:count
-    p = pset(times,:);
-    plot(p(2),p(1),'wx');
-    
+for i = 1:count
+    plot( pset(i,2), pset(i,1), 'wx')
 end
 
 srset = zeros(size(sset,1),1); %every skeleton's max cirle radius
@@ -37,7 +44,6 @@ for times=1:size(sset)
     srset(times) = r;
 end
 
-agent_radius = 10;
 sa_match = zeros(size(sset,1), size(pset,1));
 % skeleton agent match matrix, 1 represents A is in the circle radiate
 % from S, while 0 represents NOT

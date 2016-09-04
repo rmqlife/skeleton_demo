@@ -21,20 +21,23 @@ iset = [y,x];
 agent_radius = 10;
 % random selection from the inner space of the silhouette
 count = 20;
-pset = zeros(count,2);
+pset = [];
 num = 1;
-while num<count
+while num<=count
     i = randi(size(iset,1),1,1);
     p = iset(i,:);
     if dist(p,bset) < agent_radius
         continue
     end
-    pset(num,:) = p;
+    if size(pset,1)>1 && dist(p,pset) < 2*agent_radius
+        continue
+    end
+    pset = [pset;p];
     num = num + 1;
 end
 
-for i = 1:count
-    plot( pset(i,2), pset(i,1), 'wx')
+for i = 1:size(pset,1)
+    viscircles([pset(i,2),pset(i,1)], agent_radius, 'Color','w','LineWidth',0.5);
 end
 
 srset = zeros(size(sset,1),1); %every skeleton's max cirle radius
@@ -51,14 +54,18 @@ for i = 1:size(pset,1)
     p = pset(i,:);
     pstack = repmat(p,size(sset,1),1);
     % dist + agent_radius
-    pdist = sqrt(sum((pstack-sset).^2,2));
+    pdist = sqrt(sum((pstack-sset).^2,2)) + agent_radius;
     sa_match(:,i) = pdist < srset;
 end
 
-match_count = 0;
+match_count = 0; 
 while match_count<size(pset,1)
     match = sum(sa_match,2);
     [count,i] = max(match);
+    % bad result
+    if count == 0
+        break
+    end    
     match_count = match_count + count;
     p = sset(i,:);
     r = srset(i);

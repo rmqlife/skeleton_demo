@@ -14,29 +14,20 @@ bset = [y,x];
 % coordinates of skeleton pixels
 [y,x] = find(S>0);
 sset = [y,x];
-
-for times=1:10
-    % select a point p on S
-    i = randi(size(sset,1),1);
-    p = sset(i,:);
-    plot(p(2),p(1),'gx');
-    [r, ~] = dist(p,bset);
-    viscircles([p(2),p(1)], r, 'Color','r','LineWidth',0.5);
-end
-
+% inner point set
 [y,x] = find(im==0);
-iset = [y,x]; % inner point set
+iset = [y,x]; 
 
 % random selection from the inner space of the silhouette
 count = 20;
 i = randi(size(iset,1),count,1);
 pset = iset(i,:);
+
+
 for times=1:count
     p = pset(times,:);
-    plot(p(2),p(1),'wo');
-    % find the nearest point from sset
-    [r, pmin] = dist(p,sset);
-    plot(pmin(2),pmin(1),'wx');
+    plot(p(2),p(1),'wx');
+    
 end
 
 srset = zeros(size(sset,1),1); %every skeleton's max cirle radius
@@ -46,12 +37,14 @@ for times=1:size(sset)
     srset(times) = r;
 end
 
+agent_radius = 10;
 sa_match = zeros(size(sset,1), size(pset,1));
 % skeleton agent match matrix, 1 represents A is in the circle radiate
 % from S, while 0 represents NOT
 for i = 1:size(pset,1)
     p = pset(i,:);
     pstack = repmat(p,size(sset,1),1);
+    % dist + agent_radius
     pdist = sqrt(sum((pstack-sset).^2,2));
     sa_match(:,i) = pdist < srset;
 end
@@ -60,7 +53,7 @@ match_count = 0;
 while match_count<size(pset,1)
     match = sum(sa_match,2);
     [count,i] = max(match);
-    match_count = match_count + count
+    match_count = match_count + count;
     p = sset(i,:);
     r = srset(i);
     plot(p(2),p(1),'gx')
@@ -71,4 +64,3 @@ while match_count<size(pset,1)
         end
     end
 end
-

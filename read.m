@@ -10,70 +10,81 @@ rgb = cat(3, B, B, S);
 figure, imshow(rgb), hold
 % coordinates of boundary pixels
 [y,x] = find(B>0);
-bset = [y,x];
+boundary = [y,x];
 % coordinates of skeleton pixels
 [y,x] = find(S>0);
-sset = [y,x];
+skeleton = [y,x];
 % inner point set
 [y,x] = find(im==0);
-iset = [y,x]; 
+inner_space = [y,x]; 
 
 agent_radius = 10;
 % random selection from the inner space of the silhouette
 count = 20;
-pset = [];
+agents_position = [];
 num = 1;
 while num<=count
-    i = randi(size(iset,1),1,1);
-    p = iset(i,:);
-    if dist(p,bset) < agent_radius
+    i = randi(size(inner_space,1),1,1);
+    p = inner_space(i,:);
+    if dist(p,boundary) <= agent_radius
         continue
     end
-    if size(pset,1)>1 && dist(p,pset) < 2*agent_radius
+    if size(agents_position,1)>1 && dist(p,agents_position) < 2*agent_radius
         continue
     end
-    pset = [pset;p];
+    agents_position = [agents_position;p];
     num = num + 1;
 end
 
-for i = 1:size(pset,1)
-    viscircles([pset(i,2),pset(i,1)], agent_radius, 'Color','w','LineWidth',0.5);
+for i = 1:size(agents_position,1)
+    viscircles([agents_position(i,2),agents_position(i,1)], agent_radius, 'Color','w','LineWidth',0.5);
 end
 
-srset = zeros(size(sset,1),1); %every skeleton's max cirle radius
-for times=1:size(sset)
-    p = sset(times,:);
-    [r,~] = dist(p,bset);
-    srset(times) = r;
+cluster_radius = zeros(size(skeleton,1),1); %every skeleton's max cirle radius
+for i=1:size(skeleton)
+    p = skeleton(i,:);
+    [r,~] = dist(p,boundary);
+    cluster_radius(i) = r;
 end
 
-sa_match = zeros(size(sset,1), size(pset,1));
+sa_match = zeros(size(skeleton,1), size(agents_position,1));
 % skeleton agent match matrix, 1 represents A is in the circle radiate
-% from S, while 0 represents NOT
-for i = 1:size(pset,1)
-    p = pset(i,:);
-    pstack = repmat(p,size(sset,1),1);
+% from S, while 0 represents NOT, 1 respresents capable.
+for i = 1:size(agents_position,1)
+    p = agents_position(i,:);
+    pstack = repmat(p,size(skeleton,1),1);
     % dist + agent_radius
-    pdist = sqrt(sum((pstack-sset).^2,2)) + agent_radius;
-    sa_match(:,i) = pdist < srset;
+    pdist = sqrt(sum((pstack-skeleton).^2,2)) + agent_radius;
+    sa_match(:,i) = pdist <= cluster_radius;
 end
 
 match_count = 0; 
-while match_count<size(pset,1)
+while match_count<size(agents_position,1)
     match = sum(sa_match,2);
-    [count,i] = max(match);
+    count = max(match);
     % bad result
     if count == 0
         break
-    end    
+    end
     match_count = match_count + count;
-    p = sset(i,:);
-    r = srset(i);
+    % find the min radius circle in the max count
+    candidates = find(match == count);
+    if size(candidates,1) >1
+        [min_radius, min_candidates_index] = min(cluster_radius(candidates));
+        min_candidate = candidates(min_candidates_index);
+    else
+        min_candidate = candidates;
+    end
+    p = skeleton(min_candidate,:);
+    r = cluster_radius(min_candidate);
     plot(p(2),p(1),'gx')
     viscircles([p(2),p(1)],r, 'Color','g','LineWidth',0.5);
+    
+    % clear the matched agents
     for j=1:size(sa_match,2)
-        if sa_match(i,j) == 1
+        if sa_match(min_candidate,j) == 1
             sa_match(:,j) = 0;
         end
     end
 end
+

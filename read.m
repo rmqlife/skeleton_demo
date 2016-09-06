@@ -27,4 +27,5 @@ for i=1:size(clusters,1)
     viscircles([p(2),p(1)],r, 'Color','g','LineWidth',0.5);
 end
 
-cluster_struction(im,clusters(1,:),agent_radius);
+% cluster_struction(im,clusters(1,:),agent_radius);
+cluster_connection(skeleton_im, clusters);

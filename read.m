@@ -28,4 +28,18 @@ for i=1:size(clusters,1)
 end
 
 % cluster_struction(im,clusters(1,:),agent_radius);
-cluster_connection(skeleton_im, clusters);
+cluster_graph = cluster_connection(skeleton_im, clusters);
+
+
+% draw graph
+for i=1:size(clusters,1)
+    pi = clusters{i,1};
+    %plot(pi(2),pi(1),'go');
+    for j=i+1:size(clusters,1)
+        if cluster_graph(i,j)==1
+            pj = clusters{j,1};
+            plot([pi(2);pj(2)],[pi(1),pj(1)],'b-');
+            break
+        end
+    end
+end

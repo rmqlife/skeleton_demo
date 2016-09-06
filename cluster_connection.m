@@ -1,4 +1,4 @@
-function cluster_connection(skeleton_im, clusters)
+function cluster_graph = cluster_connection(skeleton_im, clusters)
 figure,imshow(skeleton_im),hold;
 cluster_size = size(clusters,1);
 cluster_centers = zeros(cluster_size,2);
@@ -33,8 +33,6 @@ for i = 1:cluster_size
     indices = (pdist<=r);
     skeleton_remain(indices,:) = [];
 end
-size(skeleton)
-size(skeleton_remain)
 
 % draw remain skeleton
 skeleton_remain_im = zeros(size(skeleton_im));
@@ -62,5 +60,12 @@ for i = 1:cluster_size
         covered_points = cluster_cover_skeleton{j};
         covered_indices = sub2ind(size(skeleton_map_copy),covered_points(:,1),covered_points(:,2));
         skeleton_map_copy(covered_indices) = 255;
+        label_im = bwlabel(skeleton_map_copy,8);
+        if label_im(pj(1),pj(2)) == label_im(pi(1),pi(2))
+            cluster_graph(i,j) = 1;
+            cluster_graph(j,i) = 1;
+        end
     end
 end
+
+

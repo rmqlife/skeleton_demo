@@ -22,7 +22,7 @@ clusters = cluster_agents(im,skeleton_im,agents_position,agent_radius);
 for i=1:size(clusters,1)
     [p,r,agents] = clusters{i,:};
     for j=1:size(agents,1)
-        viscircles([agents(j,2),agents(j,1)], agent_radius, 'Color','w','LineWidth',0.5);
+        rectangle('Position',[agents(j,2)-agent_radius,agents(j,1)-agent_radius,agent_radius*2,agent_radius*2],'Curvature', [1 1], 'FaceColor','r') 
     end
     plot(p(2),p(1),'gx')
     viscircles([p(2),p(1)],r, 'Color','g','LineWidth',0.5);

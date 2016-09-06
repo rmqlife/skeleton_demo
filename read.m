@@ -1,6 +1,9 @@
 clear; close all; clc;
+% load the bw image
 im = imread('leaf1.pgm');
+% load the skeleton image
 skeleton_im = imread('out.png');
+% process to remove the window bar
 skeleton_im = skeleton_im(23:size(skeleton_im,1),:,1);
 skeleton_im = uint8(255*(skeleton_im>0));
 % find the boundary of the original image
@@ -24,3 +27,4 @@ for i=1:size(clusters,1)
     viscircles([p(2),p(1)],r, 'Color','g','LineWidth',0.5);
 end
 
+cluster_struction(im,clusters(1,:),agent_radius);

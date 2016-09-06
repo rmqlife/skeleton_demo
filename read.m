@@ -1,8 +1,9 @@
 clear; close all; clc;
 % load the bw image
-im = imread('leaf1.pgm');
+im = imread('rect.pgm');
 % load the skeleton image
-skeleton_im = imread('out.png');
+skeleton_im = imread('rect.png');
+skeleton_im = skeleton_im(:,:,1);
 % process to remove the window bar
 skeleton_im = skeleton_im(23:size(skeleton_im,1),:,1);
 skeleton_im = uint8(255*(skeleton_im>0));
@@ -30,15 +31,14 @@ end
 % cluster_struction(im,clusters(1,:),agent_radius);
 cluster_graph = cluster_connection(skeleton_im, clusters);
 
-
 % draw graph
 for i=1:size(clusters,1)
     pi = clusters{i,1};
     %plot(pi(2),pi(1),'go');
-    for j=i+1:size(clusters,1)
+    for j=1:size(clusters,1)
         if cluster_graph(i,j)==1
             pj = clusters{j,1};
-            plot([pi(2);pj(2)],[pi(1),pj(1)],'b-');
+            plot([pi(2);pj(2)],[pi(1),pj(1)],'b-','LineWidth',3);
             break
         end
     end

@@ -8,7 +8,7 @@ for i=1:size(clusters,1)
     cluster_centers(i,:) = p;
 end
 
-%cluster_centers
+% cluster_centers
 
 % coordinates of skeleton pixels
 [y,x] = find(skeleton_im>0);

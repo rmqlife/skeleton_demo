@@ -1,6 +1,6 @@
 function agents_position = init_agents(im,count,agent_radius)
 % inner point set
-[y,x] = find(im==0);
+[y,x] = find(im>0);
 inner_space = [y,x]; 
 
 % coordinates of boundary pixels

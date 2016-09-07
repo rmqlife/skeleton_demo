@@ -1,12 +1,12 @@
 clear; close all; clc;
 % load the bw image
 im = imread('rect.pgm');
-% load the skeleton image
-skeleton_im = imread('rect.png');
-skeleton_im = skeleton_im(:,:,1);
-% process to remove the window bar
-skeleton_im = skeleton_im(23:size(skeleton_im,1),:,1);
-skeleton_im = uint8(255*(skeleton_im>0));
+im = 255*(im==0);
+if 0
+   skeleton_im = load_afmm_skeleton('rect.png');
+else
+    skeleton_im = 255 * bwmorph(im,'skel',Inf);
+end
 % find the boundary of the original image
 B = edge(im);
 B = uint8(B)*255;
@@ -18,11 +18,10 @@ agents_position = init_agents(im,20,agent_radius);
 % cluster the agents' postions, the clusters' postion is locate on the
 % skeleton
 clusters = cluster_agents(im,skeleton_im,agents_position,agent_radius);
-
 % cluster_struction(im,clusters(1,:),agent_radius);
 cluster_graph = cluster_connection_fix(skeleton_im, clusters);
 
-figure, imshow(rgb), hold
+figure, imshow(rgb), hold;
 for i=1:size(clusters,1)
     [p,r,agents] = clusters{i,:};
 %     % show each agents
@@ -32,7 +31,6 @@ for i=1:size(clusters,1)
     plot(p(2),p(1),'gx')
     viscircles([p(2),p(1)],r, 'Color','w','LineWidth',0.5);
 end
-
 % draw graph
 for i=1:size(clusters,1)
     %plot(pi(2),pi(1),'go');

@@ -76,5 +76,3 @@ for i = 1:cluster_size
         end
     end
 end
-
-

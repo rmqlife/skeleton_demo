@@ -1,14 +1,8 @@
 function cluster_graph = cluster_connection(skeleton_im, clusters)
+debug_fag = 0;
+
 figure,imshow(skeleton_im),hold;
 cluster_size = size(clusters,1);
-cluster_centers = zeros(cluster_size,2);
-for i=1:size(clusters,1)
-    [p,r,~] = clusters{i,:};
-    viscircles([p(2),p(1)],r);
-    cluster_centers(i,:) = p;
-end
-
-% cluster_centers
 
 % coordinates of skeleton pixels
 [y,x] = find(skeleton_im>0);
@@ -64,9 +58,12 @@ for i = 1:cluster_size
             cluster_graph(i,j) = 1;
             cluster_graph(j,i) = 1;
         end
-        figure,imshow(skeleton_map_copy), hold;
-        viscircles([pi(2),pi(1)],ri);
-        viscircles([pj(2),pj(1)],rj);
+        
+        if debug_fag
+            figure,imshow(skeleton_map_copy), hold;
+            viscircles([pi(2),pi(1)],ri);
+            viscircles([pj(2),pj(1)],rj);
+        end
     end
 end
 

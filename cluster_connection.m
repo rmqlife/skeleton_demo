@@ -51,8 +51,7 @@ for i = 1:cluster_size
     covered_indices = sub2ind(size(skeleton_map),covered_points(:,1),covered_points(:,2));
     skeleton_map(covered_indices) = 255;
     % show intermediate result for debug
-    %figure,imshow(skeleton_map), hold;
-    %viscircles([pi(2),pi(1)],ri);
+
     
     for j = i+1:cluster_size
         skeleton_map_copy = skeleton_map;
@@ -65,6 +64,9 @@ for i = 1:cluster_size
             cluster_graph(i,j) = 1;
             cluster_graph(j,i) = 1;
         end
+        figure,imshow(skeleton_map_copy), hold;
+        viscircles([pi(2),pi(1)],ri);
+        viscircles([pj(2),pj(1)],rj);
     end
 end
 

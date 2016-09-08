@@ -1,6 +1,6 @@
 clear; close all; clc;
 % load the bw image
-im = imread('rect.pgm');
+im = imread('data/rect.pgm');
 im = 255*(im==0);
 if 0
    skeleton_im = load_afmm_skeleton('rect.png');

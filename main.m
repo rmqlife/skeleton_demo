@@ -36,7 +36,8 @@ for i=1:size(clusters,1)
     plot(p(2),p(1),'gx')
     viscircles([p(2),p(1)],r, 'Color','w','LineWidth',0.5);
 end
-% draw graph
+
+% draw clusters graphs
 for i=1:size(clusters,1)
     %plot(pi(2),pi(1),'go');
     for j=1:size(clusters,1)

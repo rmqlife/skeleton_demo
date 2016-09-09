@@ -1,7 +1,7 @@
 function build_agents_map()
 clc;clear;close all;
 debug = 0;
-raw = imread('screenshots/a.png');
+raw = imread('screenshots/c.png');
 rim = raw(:,:,1);
 gim = raw(:,:,2);
 bim = raw(:,:,3);
@@ -13,14 +13,16 @@ end
 agents_mask = (rim==255 & bim==0);
 targets_mask = (rim==0 & bim==255);
 map_mask =(rim==bim & rim~=255 & rim~=0);
+map_mask = imfill(map_mask,[1,1],8);
+map_mask = ~bwmorph(map_mask,'open',1);
 
 % build map
-cc = bwconncomp(map_mask);
-numPixels = cellfun(@numel,cc.PixelIdxList);
-[biggest,idx] = max(numPixels);
-map_mask = zeros(size(map_mask));
-map_mask(cc.PixelIdxList{idx}) = 1;
-map_mask= imfill(map_mask,'holes');
+% cc = bwconncomp(map_mask);
+% numPixels = cellfun(@numel,cc.PixelIdxList);
+% [~,idx] = max(numPixels);
+% map_mask = zeros(size(map_mask));
+% map_mask(cc.PixelIdxList{idx}) = 1;
+% map_mask= imfill(map_mask,'holes');
 
 % build agents
 [agents_position,agents_radius] = circle_positions(agents_mask);

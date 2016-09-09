@@ -1,6 +1,6 @@
 function cluster = cluster_structure_inverse(im,cluster,agent_radius)
 background = ones(size(im));
-figure, imshow(background),hold;
+% figure, imshow(background),hold;
 [cluster_center,cluster_radius,agents] = cluster{:};
 % draw cluster contour
 plot(cluster_center(2),cluster_center(1),'gx')

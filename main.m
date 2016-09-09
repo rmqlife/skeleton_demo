@@ -21,11 +21,6 @@ clusters = cluster_agents(im,skeleton_im,agents_position,agent_radius);
 % cluster_struction(im,clusters(1,:),agent_radius);
 cluster_graph = cluster_connection_fix(skeleton_im, clusters);
 
-for i = 1:size(clusters,1)
-% cluster_arrange, make every cluster's arrangement
-    cluster_strut = cluster_structure(im,clusters(i,:),agent_radius);
-end
-
 figure, imshow(rgb), hold
 for i=1:size(clusters,1)
     [p,r,agents] = clusters{i,:};
@@ -47,4 +42,9 @@ for i=1:size(clusters,1)
             plot([pi(2),pj(2)]',[pi(1),pj(1)]','-','LineWidth',3);
         end
     end
+end
+
+for i = 1:size(clusters,1)
+% cluster_arrange, make every cluster's arrangement
+    cluster_strut = cluster_structure_inverse(im,clusters(i,:),agent_radius);
 end

@@ -42,14 +42,14 @@ for i = 1:cluster_size
     % covered points
     covered_points = cluster_cover_skeleton{i};
     covered_indices = sub2ind(size(skeleton_map),covered_points(:,1),covered_points(:,2));
-    skeleton_map(covered_indices) = 255;
+    skeleton_map(covered_indices) = 1;
     % show intermediate result for debug
     for j = i+1:cluster_size
         skeleton_map_copy = skeleton_map;
         [pj,rj,~] = clusters{j,:};
         covered_points = cluster_cover_skeleton{j};
         covered_indices = sub2ind(size(skeleton_map_copy),covered_points(:,1),covered_points(:,2));
-        skeleton_map_copy(covered_indices) = 255;
+        skeleton_map_copy(covered_indices) = 1;
         
         % other agents' center can not be bypassed
         for k = 1:cluster_size

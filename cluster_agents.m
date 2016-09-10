@@ -17,10 +17,10 @@ sa_match = zeros(size(skeleton,1), size(agents_position,1));
 % skeleton agent match matrix, 1 represents A is in the circle radiate
 % from S, while 0 represents NOT, 1 respresents capable.
 for i = 1:size(agents_position,1)
-    p = agents_position(i,:);
+    p = double(agents_position(i,:));
     pstack = repmat(p,size(skeleton,1),1);
     % dist + agent_radius
-    pdist = sqrt(sum((pstack-skeleton).^2,2)) + agent_radius;
+    pdist = sqrt(sum((pstack-skeleton).^2,2)) + double(agent_radius);
     sa_match(:,i) = pdist <= cluster_radius;
 end
 

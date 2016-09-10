@@ -2,7 +2,7 @@ clear; close all; clc;
 show_fag = 1;
 use_builtin_skeleton = 1;
 % build agents, map
-[im,agents_position,agent_radius,targets_position] = build_agents_map('screenshots/d.png', 1, 1);
+[im,agents_position,agent_radius,targets_position] = build_agents_map('screenshots/b.png', 1, 1);
 %[im,agents_position,agent_radius,targets_position] = build_agents_map('data/rect.pgm', 0, 1);
 if ~use_builtin_skeleton
    skeleton_im = load_afmm_skeleton('rect.png');

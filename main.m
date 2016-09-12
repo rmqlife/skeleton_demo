@@ -2,7 +2,7 @@ clear; close all; clc;
 show_fag = 1;
 use_builtin_skeleton = 1;
 % build agents, map
-[im,agents_position,agent_radius,targets_position] = build_agents_map('screenshots/d.png', 1, 0);
+[im,agents_position,agent_radius,targets_position] = build_agents_map('screenshots/a.png', 1, 0);
 %[im,agents_position,agent_radius,targets_position] = build_agents_map('data/rect.pgm', 0, 1);
 if ~use_builtin_skeleton
    skeleton_im = load_afmm_skeleton('rect.png');
@@ -11,7 +11,12 @@ else
 end
 % cluster the agents' postions, the clusters' postion is locate on the
 % skeleton
-clusters = cluster_agents(im,skeleton_im,agents_position,agent_radius);
+agent_clusters = cluster_agents(im,skeleton_im,agents_position,agent_radius);
+target_clusters = cluster_agents(im,skeleton_im, targets_position, agent_radius);
+
+% add both to compute the connection and structure
+clusters = [agent_clusters; target_clusters];
+
 % find the connections between different clusters
 cluster_graph = cluster_connection_fix(skeleton_im, clusters);
 
@@ -21,7 +26,10 @@ imwrite(skeleton_im,'result/skel.png');
 
 figure, imshow(im - skeleton_im), hold;
 fid = fopen('result/cluster.txt','w');
-fprintf(fid,'%g\r\n',size(clusters,1));
+fprintf(fid,'%g ',size(clusters,1));
+fprintf(fid,'%g ',size(agent_clusters,1));
+fprintf(fid,'%g\r\n',size(target_clusters,1));
+
 for i = 1:size(clusters,1)
     % cluster_arrange, make every cluster's arrangement
     [p,r,agents] = clusters{i,:};
@@ -60,28 +68,37 @@ end
 fclose(fid);
 
 fid = fopen('result/graph.txt','w');
-fprintf(fid,'%g\r\n',size(clusters,1));
-for i = 1:size(clusters,1)
-    fprintf(fid, '%g ', find(cluster_graph(i,:)==1));
+fprintf(fid,'%g ',size(clusters,1));
+fprintf(fid,'%g ',size(agent_clusters,1));
+fprintf(fid,'%g\r\n',size(target_clusters,1));
+for i = 1:size(cluster_graph,1)
+    fprintf(fid, '%g ', cluster_graph(i,:));
     fprintf(fid, '\r\n');
 end
 fclose(fid);
 
 % show the result
 if show_fag
-    B = edge(im);
-    B = uint8(B)*255;
-    rgb = cat(3, B, B, 255*skeleton_im);
+    B = 255*im;
+    rgb = cat(3, B-255*skeleton_im, B, B);
     figure, imshow(rgb), hold
     % draw clusters
-    for i=1:size(clusters,1)
-        [p,r,agents] = clusters{i,:};
-        viscircles(flip(p),r, 'Color','w','LineWidth',0.5);
+    for i=1:size(agent_clusters,1)
+        [p,r,agents] = agent_clusters{i,:};
+        viscircles(flip(p),r, 'Color','r','LineWidth',0.5);
         for j = 1:size(agents)
-            viscircles(flip(agents(j,:)),agent_radius,'Color','w');
+            viscircles(flip(agents(j,:)),agent_radius,'Color','r');
         end
     end
 
+    for i=1:size(target_clusters,1)
+        [p,r,agents] = target_clusters{i,:};
+        viscircles(flip(p),r, 'Color','b','LineWidth',0.5);
+        for j = 1:size(agents)
+            viscircles(flip(agents(j,:)),agent_radius,'Color','b');
+        end
+    end
+    
     % draw clusters graphs
     for i=1:size(clusters,1)
         for j=1:size(clusters,1)

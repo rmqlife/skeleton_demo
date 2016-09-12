@@ -2,8 +2,8 @@ clear; close all; clc;
 show_fag = 1;
 use_builtin_skeleton = 1;
 % build agents, map
-[im,agents_position,agent_radius,targets_position] = build_agents_map('screenshots/a.png', 1, 0);
-%[im,agents_position,agent_radius,targets_position] = build_agents_map('data/rect.pgm', 0, 1);
+%[im,agents_position,agent_radius,targets_position] = build_agents_map('screenshots/a.png', 1, 0);
+[im,agents_position,agent_radius,targets_position] = build_agents_map('data/liang1.pgm', 0, 1);
 if ~use_builtin_skeleton
    skeleton_im = load_afmm_skeleton('rect.png');
 else
@@ -80,14 +80,14 @@ fclose(fid);
 % show the result
 if show_fag
     B = 255*im;
-    rgb = cat(3, B-255*skeleton_im, B, B);
+    rgb = cat(3, B, B-255*skeleton_im, B-255*skeleton_im);
     figure, imshow(rgb), hold
     % draw clusters
     for i=1:size(agent_clusters,1)
         [p,r,agents] = agent_clusters{i,:};
-        viscircles(flip(p),r, 'Color','r','LineWidth',0.5);
+        viscircles(flip(p),r, 'Color',[rand(3,1)],'LineWidth',1);
         for j = 1:size(agents)
-            viscircles(flip(agents(j,:)),agent_radius,'Color','r');
+            viscircles(flip(agents(j,:)),agent_radius,'Color','b');
         end
     end
 
@@ -100,12 +100,14 @@ if show_fag
     end
     
     % draw clusters graphs
-    for i=1:size(clusters,1)
-        for j=1:size(clusters,1)
-            if cluster_graph(i,j)>0
-                pi = clusters{i,1};
-                pj = clusters{j,1};
-                plot([pi(2),pj(2)]',[pi(1),pj(1)]','-','LineWidth',3);
+    if 0 
+        for i=1:size(clusters,1)
+            for j=1:size(clusters,1)
+                if cluster_graph(i,j)>0
+                    pi = clusters{i,1};
+                    pj = clusters{j,1};
+                    plot([pi(2),pj(2)]',[pi(1),pj(1)]','-','LineWidth',3);
+                end
             end
         end
     end

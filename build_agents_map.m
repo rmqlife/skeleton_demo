@@ -19,17 +19,17 @@ else %random generate agents
     agents_radius = 10;
     targets_radius = 10;
     % initialize the agents' positions
-    agents_position = init_agents(map,10,agents_radius);
-    targets_position = init_agents(map,10,agents_radius);
+    agents_position = init_agents(map,20,agents_radius);
+    targets_position = init_agents(map,0,agents_radius);
 end
 
 % draw all of them
 if show_fag
     figure, imshow(map), hold;
-    for i = 1:size(agents_position)
+    for i = 1:size(agents_position,1)
         viscircles(flip(agents_position(i,:)), agents_radius, 'Color', 'r');
     end
-    for i = 1:size(targets_position)
+    for i = 1:size(targets_position,1)
         viscircles(flip(targets_position(i,:)), targets_radius, 'Color', 'b');
     end
 end

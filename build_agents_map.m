@@ -16,10 +16,10 @@ if with_agents
 else %random generate agents
     map = imread(filename);
     map = (map==0);
-    agents_radius = 10;
-    targets_radius = 10;
+    agents_radius = 8;
+    targets_radius = 8;
     % initialize the agents' positions
-    agents_position = init_agents(map,20,agents_radius);
+    agents_position = init_agents(map,100,agents_radius);
     targets_position = init_agents(map,0,agents_radius);
 end
 

@@ -2,7 +2,7 @@ clear; close all; clc;
 show_fag = 1;
 use_builtin_skeleton = 1;
 % build agents, map
-[im,agents_position,agent_radius,targets_position] = build_agents_map('screenshots/a.png', 1, 0);
+[im,agents_position,agent_radius,targets_position] = build_agents_map('screenshots/b.png', 1, 0);
 %[im,agents_position,agent_radius,targets_position] = build_agents_map('data/leaf1.pgm', 0, show_fag);
 if ~use_builtin_skeleton
    skeleton_im = load_afmm_skeleton('rect.png');

@@ -32,6 +32,7 @@ while match_count<size(agents_position,1)
     count = max(match);
     % bad result
     if count == 0
+        'bad result'
         break
     end
     match_count = match_count + count;

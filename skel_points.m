@@ -1,5 +1,4 @@
-clc; clear; close all;
-im = imread('data/liang2.png');
+function skel_points(im)
 im = im(:,:,1);
 im = im>0;
 border = zeros(size(im)+[2,2]);
@@ -23,7 +22,7 @@ for i=1:size(skeleton)
 end
 
 figure, imshow(skeleton_im | ~im), hold;
-fout = fopen('skeleton.txt','w');
+fout = fopen('result\skeleton.txt','w');
 fprintf(fout,'%g \r\n', size(x,1));
 for i=1:size(x,1)
     fprintf(fout,'%g ',x(i),y(i),ceil(cluster_radius(i)));
@@ -31,8 +30,8 @@ for i=1:size(x,1)
 end
 fclose(fout);
 
+% test the cluster collected
 for i=1:10
     i = randi(size(skeleton,1));
     viscircles([x(i),y(i)],cluster_radius(i));
-    
 end

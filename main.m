@@ -2,8 +2,8 @@ clear; close all; clc;
 show_fag = 1;
 use_builtin_skeleton = 1;
 % build agents, map
-[im,agents_position,agent_radius,targets_position] = build_agents_map('screenshots/b.png', 1, 0);
-%[im,agents_position,agent_radius,targets_position] = build_agents_map('data/leaf1.pgm', 0, show_fag);
+%[im,agents_position,agent_radius,targets_position] = build_agents_map('screenshots/.png', 1, 0);
+[im,agents_position,agent_radius,targets_position] = build_agents_map('data/liang5.png', 0, show_fag);
 if ~use_builtin_skeleton
    skeleton_im = load_afmm_skeleton('rect.png');
 else
@@ -93,9 +93,9 @@ if show_fag
     % draw clusters of agents
     for i=1:size(agent_clusters,1)
         [p,r,agents] = agent_clusters{i,:};
-        viscircles(flip(p),r, 'Color',[0,0,0],'LineWidth',1);
+        viscircles(flip(p),r, 'Color',[rand,rand,rand],'LineWidth',1);
         for j = 1:size(agents)
-            viscircles(flip(agents(j,:)),agent_radius,'Color','r');
+            viscircles(flip(agents(j,:)),agent_radius,'Color','b');
         end
     end
     % draw clusters of targets
@@ -108,7 +108,7 @@ if show_fag
     end
     
     % draw clusters graphs
-    if 1 
+    if 0 
         for i=1:size(clusters,1)
             for j=1:size(clusters,1)
                 if cluster_graph(i,j)>0
